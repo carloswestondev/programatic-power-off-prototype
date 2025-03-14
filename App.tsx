@@ -13,9 +13,9 @@ function App(): React.JSX.Element {
       timer = setInterval(() => {
         setTimeLeft(prevTime => prevTime - 1);
       }, 1000);
-    } else if (timeLeft === 0) {
+    } else if (timeLeft <= 0) {
       setIsShuttingDown(true);
-      handlePress();
+      handlePowerOff();
     }
 
     return () => {
@@ -24,7 +24,7 @@ function App(): React.JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft]);
 
-  const handlePress = () => {
+  const handlePowerOff = () => {
     console.log('Turning off...');
     PowerModule.shutdown();
   };
@@ -39,11 +39,15 @@ function App(): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>The projector will be turned off at:</Text>
       {isShuttingDown ? (
-        <Text style={styles.timerText}>Turning off...</Text>
+        <Text style={styles.timerText}>Powering Off...</Text>
       ) : (
-        <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
+        <>
+          <Text style={styles.titleText}>
+            The projector will be powered off in:
+          </Text>
+          <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
+        </>
       )}
     </View>
   );
